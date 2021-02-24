@@ -8,7 +8,7 @@ import re
 
 
 class GetToken(object):
-	"""获取到游客token"""
+    """获取到游客token"""
     def __init__(self):
         self.get_token_url = 'http://mobile.twitter.com/'
         self.get_token_headers = {
