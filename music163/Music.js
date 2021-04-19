@@ -1188,9 +1188,11 @@ lowBitMasks = new Array(0,1,3,7,15,31,63,127,255,511,1023,2047,4095,8191,16383,3
 function start(music_id) {
     var i9b = {
         "rid":"R_SO_4_" + music_id,
-        "offset":"20",
+        // 偏移量。可理解为初始下标
+        "offset": 0,
         "total":"false",
-        "limit":"20",
+        // 每页的请求数量
+        "limit": 100,
         "csrf_token":""
     };
     var bYf7Y = asrsea(JSON.stringify(i9b), "010001", "00e0b509f6259df8642dbc35662901477df22677ec152b5ff68ace615bb7b725152b3ab17a876aea8a5aa76d2e417629ec4ee341f56135fccf695280104e0312ecbda92557c93870114af6c9d05c4f7f0c3685b7a46bee255932575cce10b424d813cfe4875d3e82047b97ddef52741d546b8e289dc6935b3ece0462db0a22b8e7", "0CoJUm6Qyw8W8jud");

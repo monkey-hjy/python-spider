@@ -70,7 +70,7 @@ class Music(object):
 
     def run(self):
         """启动函数"""
-        test_music_id = 468176711
+        test_music_id = 1366216050
         self.get_comment(music_id=test_music_id)
 
 
