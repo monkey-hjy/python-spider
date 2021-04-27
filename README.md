@@ -10,5 +10,5 @@ python爬虫小项目
 7. [有道翻译逆向](https://github.com/monkey-hjy/python-spider/tree/main/youdao)
 
 
-CSDN不定期更新文章。个人主页 [https://blog.csdn.net/qq_42452095](https://blog.csdn.net/qq_42452095)
-B站不定期更新视频。个人主页 [https://space.bilibili.com/347405521/channel/detail?cid=181641](https://space.bilibili.com/347405521/channel/detail?cid=181641)
+- CSDN不定期更新文章。个人主页 [https://blog.csdn.net/qq_42452095](https://blog.csdn.net/qq_42452095)
+- B站不定期更新视频。个人主页 [https://space.bilibili.com/347405521/channel/detail?cid=181641](https://space.bilibili.com/347405521/channel/detail?cid=181641)
