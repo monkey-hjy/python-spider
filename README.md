@@ -11,4 +11,4 @@ python爬虫小项目
 
 
 CSDN不定期更新文章。个人主页 [https://blog.csdn.net/qq_42452095](https://blog.csdn.net/qq_42452095)
-B站不定期更新视频。个人主页 [https://space.bilibili.com/347405521](https://space.bilibili.com/347405521)
+B站不定期更新视频。个人主页 [https://space.bilibili.com/347405521/channel/detail?cid=181641](https://space.bilibili.com/347405521/channel/detail?cid=181641)
