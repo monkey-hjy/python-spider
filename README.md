@@ -8,6 +8,7 @@ python爬虫小项目
 5. [天天基金网指定基金数据抓取](https://github.com/monkey-hjy/python-spider/tree/main/jijin)
 6. [微博信息抓取](https://github.com/monkey-hjy/python-spider/tree/main/weibo)
 7. [有道翻译逆向](https://github.com/monkey-hjy/python-spider/tree/main/youdao)
+8. [链家全国租房信息抓取](https://github.com/monkey-hjy/python-spider/tree/main/lianjia)
 
 
 - CSDN不定期更新文章。个人主页 [https://blog.csdn.net/qq_42452095](https://blog.csdn.net/qq_42452095)
