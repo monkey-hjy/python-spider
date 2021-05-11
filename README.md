@@ -9,6 +9,7 @@ python爬虫小项目
 6. [微博信息抓取](https://github.com/monkey-hjy/python-spider/tree/main/weibo)
 7. [有道翻译逆向](https://github.com/monkey-hjy/python-spider/tree/main/youdao)
 8. [链家全国租房信息抓取](https://github.com/monkey-hjy/python-spider/tree/main/lianjia)
+9. [企查查免登陆爬虫](https://github.com/monkey-hjy/python-spider/tree/main/qcc)
 
 
 - CSDN不定期更新文章。个人主页 [https://blog.csdn.net/qq_42452095](https://blog.csdn.net/qq_42452095)
