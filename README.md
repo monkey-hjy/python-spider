@@ -10,6 +10,7 @@ python爬虫小项目
 7. [有道翻译逆向](https://github.com/monkey-hjy/python-spider/tree/main/youdao)
 8. [链家全国租房信息抓取](https://github.com/monkey-hjy/python-spider/tree/main/lianjia)
 9. [企查查免登陆爬虫](https://github.com/monkey-hjy/python-spider/tree/main/qcc)
+10. [大众点评svg加密](https://github.com/monkey-hjy/python-spider/tree/main/dzdp_svg)
 
 
 - CSDN不定期更新文章。个人主页 [https://blog.csdn.net/qq_42452095](https://blog.csdn.net/qq_42452095)
