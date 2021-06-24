@@ -130,4 +130,5 @@ dmypy.json
 
 .idea/
 /weibo/exist.txt
+.DS_Store
 
