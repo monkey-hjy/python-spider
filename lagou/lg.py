@@ -30,8 +30,7 @@ class LG(object):
 
     def set_proxies(self):
         """设置代理"""
-        url = 'http://18037721786.v4.dailiyun.com/query.txt?key=NP1E8E143F&word=&count=1&rand=true&ltime=0&norepeat=false&detail=false'
-        ip = requests.get(url).text.strip()
+        ip = "获取到代理IP"
         self.proxies = {
             'http': 'http://{}'.format(ip),
             'https': 'http://{}'.format(ip),
