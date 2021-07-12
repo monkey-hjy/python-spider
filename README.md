@@ -12,7 +12,7 @@ python爬虫小项目
 9. [企查查免登陆爬虫](https://github.com/monkey-hjy/python-spider/tree/main/qcc)
 10. [大众点评svg加密](https://github.com/monkey-hjy/python-spider/tree/main/dzdp_svg)
 11. [B站用户爬虫](https://github.com/monkey-hjy/python-spider/tree/main/bilibili)
-12. [拉钩免登录爬虫](https://github.com/monkey-hjy/python-spider/blob/main/lagou/lg.py)
+12. [拉钩免登录爬虫](https://github.com/monkey-hjy/python-spider/blob/main/lagou)
 
 
 - CSDN不定期更新文章。个人主页 [https://blog.csdn.net/qq_42452095](https://blog.csdn.net/qq_42452095)
