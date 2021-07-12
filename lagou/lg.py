@@ -147,8 +147,8 @@ class LG(object):
         """启动函数"""
         self.get_city_info()
         # print(self.city_info)
-        # for city_name, city_url in self.city_info.items():
-        for city_name in ['郑州', '北京', '上海', '广州', '深圳']:
+        for city_name, city_url in self.city_info.items():
+        # for city_name in ['郑州', '北京', '上海', '广州', '深圳']:
             city_url = self.city_info[city_name]
             if '-zhaopin' not in city_url:
                 city_url = city_url.rstrip('/') + '-zhaopin/'
