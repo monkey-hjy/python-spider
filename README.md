@@ -14,6 +14,7 @@ python爬虫小项目
 11. [B站用户爬虫](https://github.com/monkey-hjy/python-spider/tree/main/bilibili)
 12. [拉钩免登录爬虫](https://github.com/monkey-hjy/python-spider/blob/main/lagou)
 13. [自如租房字体加密](https://github.com/monkey-hjy/python-spider/tree/main/ziru)
+14. [知乎问答抓取](https://github.com/monkey-hjy/python-spider/tree/main/zhihu_answer)
 
 
 - CSDN不定期更新文章。个人主页 [https://blog.csdn.net/qq_42452095](https://blog.csdn.net/qq_42452095)
