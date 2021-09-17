@@ -6,7 +6,7 @@
 import requests
 from lxml import etree
 import random
-from datetime import datetime
+from datetime import datetime, time
 
 # 随机UA头
 USER_AGENT = [
@@ -29,36 +29,52 @@ USER_AGENT = [
 ]
 
 
-def get_response(url):
-    headers = {
-        'User-Agent': random.choice(USER_AGENT),
-        'Host': 'www.paoshuzw.com',
-        'Connection': 'keep-alive'
-    }
-    while True:
-        # 发现请求次数多之后会出503。所以加上while循环，直到请求成功为止
-        try:
-            response = requests.get(url, headers=headers, timeout=10)
-            if response.status_code == 200:
-                response.encoding = response.apparent_encoding
-                return response.text
-            else:
-                raise KeyError
-        except:
-            headers['User-Agent'] = random.choice(USER_AGENT)
+class SpiderBook(object):
+
+    def __init__(self):
+        self.search_url = 'https://www.biqooge.com/modules/article/search.php'
+        self._headers = {'user-agent': random.choice(USER_AGENT)}
+    
+    def search_book(self):
+        book_name = self.book_name
+        data = {
+            'searchtype': 'articlename',
+            'searchkey': book_name.encode('gbk'),
+        }
+        response = requests.post(self.search_url, headers=self._headers, data=data)
+        response.encoding = response.apparent_encoding
+        html = etree.HTML(response.text)
+        name = html.xpath('//tr[@id="nr"]/td[1]/a/text()')
+        book_url = html.xpath('//tr[@id="nr"]/td[1]/a/@href')
+        author = html.xpath('//tr[@id="nr"]/td[3]/text()')
+        for i in range(len(name)):
+            print('编号{}信息：作者-{}\t书名-{}'.format(i, author[i], name[i]))
+        need_id = int(input('输入需要的书籍编号：'))
+        self.download_book(book_url[need_id])
+    
+    def download_book(self, book_url):
+        response = requests.get(book_url, headers=self._headers)
+        response.encoding = response.apparent_encoding
+        html = etree.HTML(response.text)
+        zj_info = html.xpath('//dt[contains(text(), "章节目录")]/following-sibling::dd')
+        for i in range(len(zj_info)):
+            info = zj_info[i]
+            zj_name = info.xpath('./a/text()')[0]
+            zj_url = 'https://www.biqooge.com' + info.xpath('./a/@href')[0]
+            zj_response = requests.get(zj_url, headers=self._headers)
+            zj_response.encoding = zj_response.apparent_encoding
+            zj_html = etree.HTML(zj_response.text)
+            content = ''.join(zj_html.xpath('//div[@id="content"]/text()'))
+            print('{}/{}\tname:{}\turl:{}'.format(i+1, len(zj_info), zj_name, zj_url))
+            with open('{}.txt'.format(self.book_name), 'a', encoding='utf8') as f:
+                f.write(zj_name + '\n')
+                f.write(content + '\n\n')
+    
+    def run(self):
+        self.book_name = '完美世界'
+        self.search_book()
 
 
 if __name__ == '__main__':
-    # 在这里指定书籍的链接
-    book_url = 'http://www.paoshuzw.com/8/8345/'
-    html = etree.HTML(get_response(book_url))
-    book_name = html.xpath('//div[@id="info"]/h1/text()')[0]
-    zj_url = html.xpath('//div[@id="list"]//a/@href')
-    for url in zj_url:
-        html = etree.HTML(get_response('http://www.paoshuzw.com' + url))
-        title = html.xpath('//h1/text()')[0].strip()
-        content = ''.join(html.xpath('//div[@id="content"]/text()')).replace('\r', '\n')
-        print(datetime.now(), title)
-        with open(f'{book_name}.txt', 'a', encoding='utf8') as f:
-            f.write(title + '\n')
-            f.write(content + '\n\n')
+    s = SpiderBook()
+    s.run()
