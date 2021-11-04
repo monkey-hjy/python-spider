@@ -45,7 +45,7 @@ class SearchTweet(GetToken):
             'authorization': 'Bearer AAAAAAAAAAAAAAAAAAAAANRILgAAAAAAnNwIzUejRCOuH5E6I8xnZz4puTs'
                              '%3D1Zv7ttfk8LF81IUq16cHjhLTvJu4FA33AGWWjCpTnA',
             'user-agent': random.choice(USER_AGENT),
-            'x-guest-token': self.get_token(proxies_ip='xxx.xxx.xxx.xx:xxxx'),
+            'x-guest-token': self.get_token(proxies_ip='127.0.0.1:10809'),
         }
         # 获取数据的接口
         self.url = 'https://twitter.com/i/api/2/search/adaptive.json'

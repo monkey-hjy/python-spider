@@ -26,8 +26,6 @@ class GetToken(object):
             try:
                 response = requests.get(url=self.get_token_url, headers=self.get_token_headers, timeout=10,
                                         proxies=proxies)
-                print(response)
-                print(response.text)
                 result = re.findall(r'document.cookie.*gt=(.*?); Max-Age', response.text)
                 return result[0]
             except:

@@ -66,7 +66,7 @@ class SpiderBook(object):
             zj_html = etree.HTML(zj_response.text)
             content = ''.join(zj_html.xpath('//div[@id="content"]/text()'))
             print('{}/{}\tname:{}\turl:{}'.format(i+1, len(zj_info), zj_name, zj_url))
-            with open('{}.txt'.format(self.book_name), 'a', encoding='utf8') as f:
+            with open('{}.txt'.format(self.book), 'a', encoding='utf8') as f:
                 f.write(zj_name + '\n')
                 f.write(content + '\n\n')
     
