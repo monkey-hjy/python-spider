@@ -9,14 +9,9 @@ import random
 import time
 from datetime import datetime
 from hashlib import md5
-import redis
-import traceback
 from urllib.parse import urlparse, parse_qs, urlencode
 
-import pymysql
 import requests
-import queue
-import threading
 from requests import utils
 from loguru import logger
 
