@@ -1,80 +1,69 @@
 # -*- coding: utf-8 -*-
-# @Author: monkey-hjy
-# @Date:   2021-02-24 17:12:52
-# @Last Modified by:   monkey-hjy
-# @Last Modified time: 2021-02-24 17:16:23
-import requests
-from lxml import etree
-import random
-from datetime import datetime, time
+import base64
+import hashlib
+import json
+import re
+import time
 
-# 随机UA头
-USER_AGENT = [
-    "Mozilla/4.0 (compatible; MSIE 6.0; Windows NT 5.1; SV1; AcooBrowser; .NET CLR 1.1.4322; .NET CLR 2.0.50727)",
-    "Mozilla/4.0 (compatible; MSIE 7.0; Windows NT 6.0; Acoo Browser; SLCC1; .NET CLR 2.0.50727; Media Center PC 5.0; .NET CLR 3.0.04506)",
-    "Mozilla/4.0 (compatible; MSIE 7.0; AOL 9.5; AOLBuild 4337.35; Windows NT 5.1; .NET CLR 1.1.4322; .NET CLR 2.0.50727)",
-    "Mozilla/5.0 (Windows; U; MSIE 9.0; Windows NT 9.0; en-US)",
-    "Mozilla/5.0 (compatible; MSIE 9.0; Windows NT 6.1; Win64; x64; Trident/5.0; .NET CLR 3.5.30729; .NET CLR 3.0.30729; .NET CLR 2.0.50727; Media Center PC 6.0)",
-    "Mozilla/5.0 (compatible; MSIE 8.0; Windows NT 6.0; Trident/4.0; WOW64; Trident/4.0; SLCC2; .NET CLR 2.0.50727; .NET CLR 3.5.30729; .NET CLR 3.0.30729; .NET CLR 1.0.3705; .NET CLR 1.1.4322)",
-    "Mozilla/4.0 (compatible; MSIE 7.0b; Windows NT 5.2; .NET CLR 1.1.4322; .NET CLR 2.0.50727; InfoPath.2; .NET CLR 3.0.04506.30)",
-    "Mozilla/5.0 (Windows; U; Windows NT 5.1; zh-CN) AppleWebKit/523.15 (KHTML, like Gecko, Safari/419.3) Arora/0.3 (Change: 287 c9dfb30)",
-    "Mozilla/5.0 (X11; U; Linux; en-US) AppleWebKit/527+ (KHTML, like Gecko, Safari/419.3) Arora/0.6",
-    "Mozilla/5.0 (Windows; U; Windows NT 5.1; en-US; rv:1.8.1.2pre) Gecko/20070215 K-Ninja/2.1.1",
-    "Mozilla/5.0 (Windows; U; Windows NT 5.1; zh-CN; rv:1.9) Gecko/20080705 Firefox/3.0 Kapiko/3.0",
-    "Mozilla/5.0 (X11; Linux i686; U;) Gecko/20070322 Kazehakase/0.4.5",
-    "Mozilla/5.0 (X11; U; Linux i686; en-US; rv:1.9.0.8) Gecko Fedora/1.9.0.8-1.fc10 Kazehakase/0.5.6",
-    "Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/535.11 (KHTML, like Gecko) Chrome/17.0.963.56 Safari/535.11",
-    "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_7_3) AppleWebKit/535.20 (KHTML, like Gecko) Chrome/19.0.1036.7 Safari/535.20",
-    "Opera/9.80 (Macintosh; Intel Mac OS X 10.6.8; U; fr) Presto/2.9.168 Version/11.52",
-]
+import requests
+from Crypto.Cipher import AES
+from Crypto.Util.Padding import pad
+
+API = 'https://apibi.cc/api'
+USER_AGENT = 'Mozilla/5.0 (Linux; Android 10; Pixel 3) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0 Mobile Safari/537.36'
+
+_code = hashlib.md5(b'book@token.html').hexdigest()
+IV, KEY = _code[:16].encode(), _code[16:].encode()
+
+
+def token(params):
+    data = json.dumps(params, separators=(',', ':')).encode()
+    cipher = AES.new(KEY, AES.MODE_CBC, IV)
+    return base64.b64encode(cipher.encrypt(pad(data, 16))).decode()
+
+
+def api_get(path, params):
+    for _ in range(3):
+        response = requests.get(API + '/' + path, params=params,
+                                headers={'user-agent': USER_AGENT}, timeout=20)
+        if response.status_code == 200 and response.text.strip():
+            return response.json()
+        time.sleep(1.2)
+    raise RuntimeError('{} 请求失败：HTTP {}'.format(path, response.status_code))
 
 
 class SpiderBook(object):
 
     def __init__(self):
-        self.search_url = 'https://www.biqooge.com/modules/article/search.php'
-        self._headers = {'user-agent': random.choice(USER_AGENT)}
-    
+        self.book_name = input('输入书名：').strip()
+        self.books = []
+
     def search_book(self):
-        book_name = self.book_name
-        data = {
-            'searchtype': 'articlename',
-            'searchkey': book_name.encode('gbk'),
-        }
-        response = requests.post(self.search_url, headers=self._headers, data=data)
-        response.encoding = response.apparent_encoding
-        html = etree.HTML(response.text)
-        name = html.xpath('//tr[@id="nr"]/td[1]/a/text()')
-        book_url = html.xpath('//tr[@id="nr"]/td[1]/a/@href')
-        author = html.xpath('//tr[@id="nr"]/td[3]/text()')
-        for i in range(len(name)):
-            print('编号{}信息：作者-{}\t书名-{}'.format(i, author[i], name[i]))
+        data = api_get('search', {'q': self.book_name})
+        self.books = data.get('data') or []
+        if not self.books:
+            print('没有搜到：{}'.format(self.book_name))
+            return
+        for i, book in enumerate(self.books):
+            print('编号{}信息：作者-{}\t书名-{}'.format(i, book.get('author', ''), book.get('title', '')))
         need_id = int(input('输入需要的书籍编号：'))
-        self.download_book(book_url[need_id])
-    
-    def download_book(self, book_url):
-        response = requests.get(book_url, headers=self._headers)
-        response.encoding = response.apparent_encoding
-        html = etree.HTML(response.text)
-        zj_info = html.xpath('//dt[contains(text(), "章节目录")]/following-sibling::dd')
-        for i in range(len(zj_info)):
-            info = zj_info[i]
-            zj_name = info.xpath('./a/text()')[0]
-            zj_url = 'https://www.biqooge.com' + info.xpath('./a/@href')[0]
-            zj_response = requests.get(zj_url, headers=self._headers)
-            zj_response.encoding = zj_response.apparent_encoding
-            zj_html = etree.HTML(zj_response.text)
-            content = ''.join(zj_html.xpath('//div[@id="content"]/text()'))
-            print('{}/{}\tname:{}\turl:{}'.format(i+1, len(zj_info), zj_name, zj_url))
-            with open('{}.txt'.format(self.book), 'a', encoding='utf8') as f:
-                f.write(zj_name + '\n')
-                f.write(content + '\n\n')
-    
+        self.download_book(self.books[need_id])
+
+    def download_book(self, book):
+        book_id = book['id']
+        chapters = api_get('booklist', {'token': token({'id': book_id})})['list']
+        filename = '{}.txt'.format(re.sub(r'[\\/:*?"<>|]', '_', book['title']))
+        for i in range(len(chapters)):
+            chapter = api_get('chapter', {'token': token({'id': book_id, 'chapterid': i + 1})})
+            print('{}/{}\tname:{}\t字数:{}'.format(i + 1, len(chapters), chapter['chaptername'], len(chapter['txt'])))
+            with open(filename, 'a', encoding='utf8') as f:
+                f.write(chapter['chaptername'] + '\n')
+                f.write(chapter['txt'] + '\n\n')
+        print('下载完成：{}'.format(filename))
+
     def run(self):
-        self.book_name = '完美世界'
         self.search_book()
 
 
 if __name__ == '__main__':
-    s = SpiderBook()
-    s.run()
+    SpiderBook().run()
